@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        EC2_IP = "13.203.101.22"
+        EC2_IP = "13.203.101.225"
         EC2_USER = "ubuntu"
     }
 
@@ -27,9 +27,9 @@ pipeline {
             steps {
                 sshagent(['ec2-ssh-key']) {
                     sh '''
-                        scp -o StrictHostKeyChecking=no app.py ubuntu@13.203.101.225:~/app.py
-                        ssh ubuntu@13.203.101.225 "pkill -f app.py || true"
-                        ssh ubuntu@$13.203.101.225 "nohup python3 ~/app.py > ~/app.log 2>&1 &"
+                        scp -o StrictHostKeyChecking=no app.py $EC2_USER@$EC2_IP:~/app.py
+                        ssh $EC2_USER@$EC2_IP "pkill -f app.py || true"
+                        ssh $EC2_USER@$EC2_IP "nohup python3 ~/app.py > ~/app.log 2>&1 &"
                         echo "Deployed successfully!"
                     '''
                 }
@@ -38,7 +38,7 @@ pipeline {
     }
 
     post {
-        success { echo "Pipeline SUCCESS ✅ }
+        success { echo "Pipeline SUCCESS ✅" }
         failure { echo "Pipeline FAILED ❌" }
     }
 }
