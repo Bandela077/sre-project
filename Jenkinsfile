@@ -14,14 +14,15 @@ pipeline {
             }
         }
 
-        stage('Test') {
-            steps {
-                sh '''
-                    pip3 install flask pytest
-                    echo "Tests passed!"
-                '''
-            }
-        }
+  stage('Test') {
+    steps {
+        sh '''
+            python3 -m venv venv
+            ./venv/bin/pip install flask pytest
+            echo "Tests passed!"
+        '''
+    }
+}
 
         stage('Deploy to EC2') {
             steps {
